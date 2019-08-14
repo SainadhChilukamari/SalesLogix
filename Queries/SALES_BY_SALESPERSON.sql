@@ -1,0 +1,20 @@
+--Sales by quarter, year, sales person
+
+SELECT 
+SALESPERSON,
+count(A.AccountID) AS #Sales,
+SUM(Software_price) AS Total_Sales,
+YEAR(signed_date) AS sign_YEAR,
+DATEPART(QQ,SIGNED_DATE) AS sign_Quarter
+FROM sysdba.ACCOUNT A
+LEFT JOIN sysdba.ACCOUNT_FSI_CONTRACT AFC
+ON A.ACCOUNTID = AFC.ACCOUNTID
+WHERE type = 'client' AND AFC.SALESPERSON IS NOT NULL AND AFC.SOFTWARE_PRICE IS NOT NULL AND SIGNED_DATE IS NOT NULL
+GROUP BY SALESPERSON,
+YEAR(signed_date),
+DATEPART(QQ,SIGNED_DATE),
+type
+ORDER BY sign_YEAR,
+sign_Quarter,
+SALESPERSON,
+type
